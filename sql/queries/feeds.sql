@@ -19,3 +19,14 @@ WHERE url = $1;
 
 -- name: DeleteFeed :exec
 Delete from feeds where user_id = $1 and url = $2;
+
+-- name: MarkFeedFetched :one
+update feeds
+set last_fetched_at = now(), updated_at = now()
+where id = $1
+RETURNING *;
+
+-- name: GetNextFeedToFetch :one
+select * from feeds
+ORDER BY last_fetched_at ASC NULLS FIRST
+limit 1;
