@@ -9,12 +9,11 @@ import (
 	"main.go/internal/database"
 )
 
-func handleAddFeed(s *state, cmd command) error {
+func handleAddFeed(s *state, cmd command, user database.User) error {
 	if len(cmd.args) != 2 {
 		return fmt.Errorf("usage: %s <name> <url>", cmd.name)
 	}
 
-	user, err := s.db.GetUserByName(context.Background(), s.cfg.CurrentUserName)
 	name := cmd.args[0]
 	url := cmd.args[1]
 
